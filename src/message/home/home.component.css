@@ -1,0 +1,10 @@
+.button-container {
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .btn {
+    display: inline-block;
+  }
+  

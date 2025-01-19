@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-personal_data',
-  templateUrl: './view.component.html',
-  styleUrls: ['./view.component.css']
+  templateUrl: './confirm_message.component.html',
+  styleUrls: ['./confirm_message.component.css']
 })
-export class ViewComponent {
+export class ConfirmMessageComponent {
 
   onSubmit(): void {
     console.log("Formularz został zatwierdzony:");

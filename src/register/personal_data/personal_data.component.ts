@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-personal_data',
   templateUrl: './personal_data.component.html',
   styleUrls: ['./personal_data.component.css']
 })

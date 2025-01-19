@@ -1,0 +1,32 @@
+<div class="jumbotron p-4 bg-light rounded">
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <label for="startDate" class="form-label">Data rozpoczęcia:</label>
+      <input type="date" id="startDate" class="form-control mb-3" />
+
+      <label for="endDate" class="form-label">Data zakończenia:</label>
+      <input type="date" id="endDate" class="form-control" />
+    </div>
+    
+    <div class="col-md-6">
+      <label for="largeTextArea" class="form-label">Szczegóły:</label>
+      <textarea id="largeTextArea" class="form-control mb-3" rows="6" placeholder="Tutaj możesz wpisać szczegóły..."></textarea>
+
+      <label for="dropdownMenu" class="form-label">Wybierz opcję:</label>
+      <select id="dropdownMenu" class="form-select">
+        <option value="" selected disabled>Wybierz...</option>
+        <option value="1">Opcja 1</option>
+        <option value="2">Opcja 2</option>
+        <option value="3">Opcja 3</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="text-end">
+    <button type="submit" class="btn btn-primary">Zatwierdź</button>
+  </div>  
+
+  <div class="button-container">
+    <a href="/view" class="btn btn-secondary btn-lg">Dalej</a>
+  </div>
+</div>

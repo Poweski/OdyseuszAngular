@@ -1,0 +1,108 @@
+<div class="container mt-5">
+    <div class="jumbotron p-4 bg-light rounded">
+    <h2 class="mb-4">Rejestracja podróży</h2>
+    <h5 class="mb-5">Sekcja 2: Etapy podróży</h5>
+    <p class="mb-3">Etap: n</p>
+      <form (ngSubmit)="onSubmit()">
+        <div class="row">
+    
+          <div class="col-md-6">
+            <div formGroupName="name">
+              <div class="mb-3">
+                <label for="firstName" class="form-label">Ulica</label>
+                <input id="firstName" formControlName="firstName" class="form-control" />
+                <div *ngIf="form.get('name.firstName')?.invalid && form.get('name.firstName')?.touched" class="text-danger">
+                  Imię jest wymagane.
+                </div>
+              </div>
+    
+              <div class="mb-3">
+                <label for="lastName" class="form-label">Miasto</label>
+                <input id="lastName" formControlName="lastName" class="form-control" />
+                <div *ngIf="form.get('name.lastName')?.invalid && form.get('name.lastName')?.touched" class="text-danger">
+                  Nazwisko jest wymagane.
+                </div>
+              </div>
+    
+              <div class="mb-3">
+                <label for="pesel" class="form-label">Kod pocztowy</label>
+                <input id="pesel" formControlName="pesel" class="form-control" />
+                <div *ngIf="form.get('name.pesel')?.invalid && form.get('name.pesel')?.touched" class="text-danger">
+                  PESEL jest wymagany i musi zawierać 11 cyfr.
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <div class="col-md-6">
+            <div formGroupName="address">
+              <div class="mb-3">
+                <label for="street" class="form-label">Kraj</label>
+                <input id="street" formControlName="street" class="form-control" />
+                <div *ngIf="form.get('address.street')?.invalid && form.get('address.street')?.touched" class="text-danger">
+                  Ulica jest wymagana.
+                </div>
+              </div>
+    
+              <div class="mb-3">
+                <label for="city" class="form-label">Organizator pobytu</label>
+                <input id="city" formControlName="city" class="form-control" />
+                <div *ngIf="form.get('address.city')?.invalid && form.get('address.city')?.touched" class="text-danger">
+                  Miasto jest wymagane.
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                    <form>
+                        <div class="form-container">
+                          <label for="startDate">Data przyjazdu</label>
+                          <input type="date" id="startDate" name="startDate">
+                        </div>
+                      </form>
+                </div>
+                <div class="col-md-6">
+                    <form>
+                        <div class="form-container">
+                          <label for="endDate">Data wyjazdu</label>
+                          <input type="date" id="endDate" name="endDate">
+                        </div>
+                      </form>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+    
+        <div class="row justify-content-center mt-4">
+               <div class="col-auto">
+            <button 
+              type="button" 
+              class="btn btn-secondary" 
+              style="width:100px;" 
+              (click)="goBack()">
+              Cofnij
+            </button>
+          </div> 
+          
+          <div class="col-auto">
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              style="width:100px;" 
+              >
+              Zatwierdź
+            </button>
+          </div>
+    
+        </div>
+      </form>
+    
+      <div class="button-container">
+        <a href="/confirm_register" class="btn btn-secondary btn-lg">Dalej</a>
+      </div>
+    
+    </div>
+    </div>
+    
