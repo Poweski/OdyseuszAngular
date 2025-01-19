@@ -1,0 +1,17 @@
+.container {
+    max-width: 800px;
+  }
+  .border {
+    border-color: #ddd;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin-top: 20px;
+  }
+  
+  .text-danger {
+    font-size: 0.9em;
+  }
+  
+  

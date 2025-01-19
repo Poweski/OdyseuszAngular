@@ -1,0 +1,43 @@
+
+  <div class="container mt-5">
+    <div class="jumbotron p-4 bg-light rounded">
+    <h2 class="mb-4">Rejestracja podróży</h2>
+    <h5 class="mb-5">Sekcja 2: Etapy podróży</h5>
+
+    <form id="numberForm" class="text-center" >
+      <label for="numberSelect" class="form-label fs-5">Liczba etapów podróży:</label>
+      <select id="numberSelect" class="form-select  mx-auto mb-3 " style="width:80px;"required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+
+      <div class="row justify-content-center mt-4">
+        <div class="col-auto">
+        <button 
+        type="button" 
+        class="btn btn-secondary" 
+        style="width:100px;" 
+        (click)="goBack()">
+        Cofnij
+        </button>
+    </div> 
+    
+    <div class="col-auto">
+        <button 
+        type="submit" 
+        class="btn btn-primary"
+        style="width:100px;"
+        >Dalej
+        </button>
+    </div>
+    </div>
+    </form>
+
+    <div class="button-container">
+        <a href="/register_stages" class="btn btn-secondary btn-lg">Dalej</a>
+      </div>
+  </div>
+</div>

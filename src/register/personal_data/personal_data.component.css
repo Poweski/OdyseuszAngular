@@ -1,0 +1,25 @@
+.container {
+    max-width: 800px;
+    max-height: 1000px;
+  }
+  form .form-label {
+    font-weight: bold;
+  }
+  .border {
+    border-color: #ddd;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin-top: 20px;
+  }
+  
+  .text-danger {
+    font-size: 0.9em;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
