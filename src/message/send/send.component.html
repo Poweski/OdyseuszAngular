@@ -2,27 +2,28 @@
 <form>
     <div class="row mb-3">
       <div class="col-md-6">
-        <label for="selectField" class="form-label">Wybierz opcję:</label>
+        <label for="selectField" class="form-label">Wybierz kraj:</label>
         <select id="selectField" class="form-select">
-          <option value="" selected disabled>Wybierz...</option>
           <option value="1">Opcja 1</option>
           <option value="2">Opcja 2</option>
           <option value="3">Opcja 3</option>
         </select>
       </div>
       <div class="col-md-6">
-        <label for="textField" class="form-label">Wprowadź tekst:</label>
-        <input type="text" id="textField" class="form-control" placeholder="Wpisz coś tutaj" />
+        <label for="textField" class="form-label">Wybrane kraje:</label>
+        <input type="text" id="textField" class="form-control" placeholder="" disabled/>
       </div>
     </div>
     <div class="mb-3">
-      <label for="largeTextArea" class="form-label">Szczegóły:</label>
-      <textarea id="largeTextArea" class="form-control" rows="6" placeholder="Tutaj możesz wpisać szczegóły..."></textarea>
+      <label for="largeTextArea" class="form-label">Treść wiadomości:</label>
+      <textarea id="largeTextArea" class="form-control" rows="6" placeholder="Tutaj możesz wpisać treść wiadomości..."></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Zatwierdź</button>
+    <div class="row mb-3 justify-content-center">
+    <button type="submit" class="btn btn-primary" style="width:200px;">Wyślij wiadomość</button>
+  </div>
   </form>
 
   <div class="button-container">
-    <a href="/confirm_message" class="btn btn-secondary btn-lg">Dalej</a>
+    <a href="/confirm_message" class="btn btn-secondary">Dalej</a>
   </div>
 </div>

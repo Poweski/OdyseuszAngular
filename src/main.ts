@@ -3,6 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Routes } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { PersonalDataComponent } from './register/personal_data/personal_data.component';
 import { NumberOfStagesComponent } from './register/number_of_stages/number_of_stages.component';
 import { StageComponent } from './register/stage/stage.component';
@@ -19,7 +21,7 @@ const routes: Routes = [
   { path: 'home', component: HomePageComponent },
   { path: 'personal_data', component: PersonalDataComponent },
   { path: 'number_of_stages', component: NumberOfStagesComponent },
-  { path: 'stage', component: StageComponent },
+  { path: 'stage/:stage', component: StageComponent },
   { path: 'confirm_register', component: ConfirmRegisterComponent },
   { path: 'send', component: SendComponent },
   { path: 'confirm_message', component: ConfirmMessageComponent },
@@ -30,7 +32,9 @@ const routes: Routes = [
 const appConfig = {
   imports: [
     FormsModule,
-    AppComponent
+    AppComponent,
+    CommonModule,
+    ReactiveFormsModule
   ],
   providers: [
     provideHttpClient(),

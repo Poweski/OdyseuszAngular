@@ -2,77 +2,86 @@
     <div class="jumbotron p-4 bg-light rounded">
     <h2 class="mb-4">Rejestracja podróży</h2>
     <h5 class="mb-5">Sekcja 2: Etapy podróży</h5>
-    <p class="mb-3">Etap: n</p>
-      <form (ngSubmit)="onSubmit()">
+    <p class="mb-3">Etap: {{stageNumber}}</p>
+    <form [formGroup]="form" (ngSubmit)="onSubmit($event)">
         <div class="row">
     
           <div class="col-md-6">
-            <div formGroupName="name">
               <div class="mb-3">
-                <label for="firstName" class="form-label">Ulica</label>
-                <input id="firstName" formControlName="firstName" class="form-control" />
-                <div *ngIf="form.get('name.firstName')?.invalid && form.get('name.firstName')?.touched" class="text-danger">
-                  Imię jest wymagane.
-                </div>
-              </div>
-    
-              <div class="mb-3">
-                <label for="lastName" class="form-label">Miasto</label>
-                <input id="lastName" formControlName="lastName" class="form-control" />
-                <div *ngIf="form.get('name.lastName')?.invalid && form.get('name.lastName')?.touched" class="text-danger">
-                  Nazwisko jest wymagane.
-                </div>
-              </div>
-    
-              <div class="mb-3">
-                <label for="pesel" class="form-label">Kod pocztowy</label>
-                <input id="pesel" formControlName="pesel" class="form-control" />
-                <div *ngIf="form.get('name.pesel')?.invalid && form.get('name.pesel')?.touched" class="text-danger">
-                  PESEL jest wymagany i musi zawierać 11 cyfr.
-                </div>
-              </div>
-            </div>
-          </div>
-    
-          <div class="col-md-6">
-            <div formGroupName="address">
-              <div class="mb-3">
-                <label for="street" class="form-label">Kraj</label>
+                <label for="street" class="form-label">Ulica</label>
                 <input id="street" formControlName="street" class="form-control" />
-                <div *ngIf="form.get('address.street')?.invalid && form.get('address.street')?.touched" class="text-danger">
+                <div *ngIf="form.get('street')?.invalid && form.get('street')?.touched" class="text-danger">
                   Ulica jest wymagana.
                 </div>
               </div>
     
               <div class="mb-3">
-                <label for="city" class="form-label">Organizator pobytu</label>
+                <label for="city" class="form-label">Miasto</label>
                 <input id="city" formControlName="city" class="form-control" />
-                <div *ngIf="form.get('address.city')?.invalid && form.get('address.city')?.touched" class="text-danger">
+                <div *ngIf="form.get('city')?.invalid && form.get('city')?.touched" class="text-danger">
                   Miasto jest wymagane.
                 </div>
               </div>
-
+    
+              <div class="mb-3">
+                <label for="postalCode" class="form-label">Kod pocztowy</label>
+                <input id="postalCode" formControlName="postalCode" class="form-control" />
+                <div *ngIf="form.get('postalCode')?.invalid && form.get('postalCode')?.touched" class="text-danger">
+                  Kod pocztowy jest wymagany.
+                </div>
+              </div>
+            </div>
+    
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="country" class="form-label">Kraj</label>
+              <select id="country" formControlName="country" class="form-select">
+                <option value="">Wybierz kraj</option>
+                <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+              </select>
+              <div *ngIf="form.get('country')?.invalid && form.get('country')?.touched" class="text-danger">
+                Kraj jest wymagany.
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label for="organizer" class="form-label">Organizator pobytu</label>
+              <select id="organizer" formControlName="organizer" class="form-select">
+                <option value="">Wybierz organizatora</option>
+                <option *ngFor="let organizer of organizers" [value]="organizer">{{ organizer }}</option>
+              </select>
+              <div *ngIf="form.get('organizer')?.invalid && form.get('organizer')?.touched" class="text-danger">
+                Organizator pobytu jest wymagany.
+              </div>
+            </div>
+            
+              
               <div class="row">
                 <div class="col-md-6">
-                    <form>
-                        <div class="form-container">
-                          <label for="startDate">Data przyjazdu</label>
-                          <input type="date" id="startDate" name="startDate">
-                        </div>
-                      </form>
+                  <div class="form-container">
+                    <label for="startDate" class="form-label">Data przyjazdu</label>
+                    <input type="date" id="startDate" formControlName="startDate" class="form-control" />
+                    <div *ngIf="form.get('startDate')?.invalid && form.get('startDate')?.touched" class="text-danger">
+                      Data przyjazdu jest wymagana.
+                    </div>
+                  </div>
                 </div>
+              
                 <div class="col-md-6">
-                    <form>
-                        <div class="form-container">
-                          <label for="endDate">Data wyjazdu</label>
-                          <input type="date" id="endDate" name="endDate">
-                        </div>
-                      </form>
+                  <div class="form-container">
+                    <label for="endDate" class="form-label">Data wyjazdu</label>
+                    <input type="date" id="endDate" formControlName="endDate" class="form-control" />
+                    <div *ngIf="form.get('endDate')?.invalid && form.get('endDate')?.touched" class="text-danger">
+                      Data wyjazdu jest wymagana.
+                    </div>
+                    <div *ngIf="form.get('endDate')?.hasError('endDateBeforeStartDate')" class="text-danger">
+                      Data wyjazdu nie może być wcześniejsza niż data przyjazdu.
+                    </div>
+                  </div>
                 </div>
               </div>
 
             </div>
-          </div>
         </div>
     
         <div class="row justify-content-center mt-4">
@@ -100,7 +109,7 @@
       </form>
     
       <div class="button-container">
-        <a href="/confirm_register" class="btn btn-secondary btn-lg">Dalej</a>
+        <a href="/confirm_register" class="btn btn-secondary">Dalej</a>
       </div>
     
     </div>
