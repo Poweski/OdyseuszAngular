@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 'home', component: HomePageComponent },
   { path: 'personal_data', component: PersonalDataComponent },
   { path: 'number_of_stages', component: NumberOfStagesComponent },
-  { path: 'stage/:stage', component: StageComponent },
+  { path: 'stage/:totalStages/:stageNumber', component: StageComponent },
   { path: 'confirm_register', component: ConfirmRegisterComponent },
   { path: 'send', component: SendComponent },
   { path: 'confirm_message', component: ConfirmMessageComponent },

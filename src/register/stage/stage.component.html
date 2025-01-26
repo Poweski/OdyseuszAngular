@@ -54,7 +54,6 @@
                 Organizator pobytu jest wymagany.
               </div>
             </div>
-            
               
               <div class="row">
                 <div class="col-md-6">
@@ -63,6 +62,12 @@
                     <input type="date" id="startDate" formControlName="startDate" class="form-control" />
                     <div *ngIf="form.get('startDate')?.invalid && form.get('startDate')?.touched" class="text-danger">
                       Data przyjazdu jest wymagana.
+                    </div>
+                    <div *ngIf="form.get('startDate')?.hasError('pastDate')" class="text-danger">
+                      Data przyjazdu nie może być w przeszłości.
+                    </div>
+                    <div *ngIf="form.get('startDate')?.hasError('dateError') && form.get('startDate')?.touched" class="text-danger">
+                      Data przyjazdu nie może być wcześniejsza niż data wyjazdu poprzedniego etapu.
                     </div>
                   </div>
                 </div>
@@ -74,7 +79,10 @@
                     <div *ngIf="form.get('endDate')?.invalid && form.get('endDate')?.touched" class="text-danger">
                       Data wyjazdu jest wymagana.
                     </div>
-                    <div *ngIf="form.get('endDate')?.hasError('endDateBeforeStartDate')" class="text-danger">
+                    <div *ngIf="form.get('endDate')?.hasError('pastDate')" class="text-danger">
+                      Data wyjazdu nie może być w przeszłości.
+                    </div>
+                    <div *ngIf="form.hasError('invalidRange')" class="text-danger">
                       Data wyjazdu nie może być wcześniejsza niż data przyjazdu.
                     </div>
                   </div>
@@ -106,12 +114,7 @@
           </div>
     
         </div>
-      </form>
-    
-      <div class="button-container">
-        <a href="/confirm_register" class="btn btn-secondary">Dalej</a>
-      </div>
-    
+      </form>  
     </div>
     </div>
     

@@ -24,7 +24,7 @@ export class NumberOfStagesComponent implements OnInit {
     if (this.numberForm.valid) {
       const numberOfStages = this.numberForm.value.numberOfStages;
       console.log(numberOfStages);
-      this.router.navigate(['/stage/1']);
+      this.router.navigate([`/stage/${numberOfStages}/1`]);
     } else {
       console.warn('Formularz jest nieprawidłowy!');
       this.numberForm.markAllAsTouched();

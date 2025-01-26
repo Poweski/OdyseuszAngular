@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ValidationErrors } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
+import { FormDataService } from '../../shared/data-form.service';
 
 @Component({
   templateUrl: './stage.component.html',
@@ -13,62 +13,117 @@ export class StageComponent implements OnInit {
   form!: FormGroup;
   stageNumber: number = 1;
   totalStages: number = 5;
-  countries: string[] = ['Polska', 'Niemcy', 'Francja', 'USA'];
-  organizers: string[] = ['Organizator 1', 'Organizator 2', 'Organizator 3'];
+  countries: string[] = [];
+  organizers: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private formDataService: FormDataService
   ) {}
 
   ngOnInit(): void {
-    this.stageNumber = Number(this.activatedRoute.snapshot.paramMap.get('stage')) || 1;
-    this.form = this.fb.group({
-      street: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      postalCode: ['', [Validators.required]],
-      country: ['', [Validators.required]],
-      organizer: ['', [Validators.required]],
-      startDate: ['', [Validators.required]],
-      endDate: ['', [Validators.required], this.endDateBeforeStartDate.bind(this)]
+    this.activatedRoute.params.subscribe(params => {
+      this.totalStages = +params['totalStages'];
+      this.stageNumber = +params['stageNumber'];
+      this.resetForm();
     });
+    const savedData = this.formDataService.getFormData(this.stageNumber);
+    this.form = this.fb.group({
+      street: [savedData?.street || '', [Validators.required]],
+      city: [savedData?.city || '', [Validators.required]],
+      postalCode: [savedData?.postalCode || '', [Validators.required]],
+      country: [savedData?.country || '', [Validators.required]],
+      organizer: [savedData?.organizer || '', [Validators.required]],
+      startDate: [savedData?.startDate || '', [Validators.required, futureDateValidator()]],
+      endDate: [savedData?.endDate || '', [Validators.required, futureDateValidator()]],
+      },
+      { 
+        validators: [dateRangeValidator, dateStageValidator(this.formDataService, this.stageNumber) ]
+      }
+    );
+
+    this.refreshLists();
   }
 
-  endDateBeforeStartDate(control: any): ValidationErrors | null {
-    const startDate = this.form.get('startDate')?.value;
-    const endDate = control.value;
+  private refreshLists(): void {
+    this.countries = ['Polska', 'Niemcy', 'Francja', 'USA'];
+    this.organizers = ['Organizator 1', 'Organizator 2', 'Organizator 3'];
+  }
 
-    if (!startDate || !endDate) return null;
-
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    if (end < start) {
-      return { endDateBeforeStartDate: true };
-    }
-
-    return null;
+  private resetForm(): void {
+    const savedData = this.formDataService.getFormData(this.stageNumber);
+    this.formDataService.resetFormData(this.stageNumber);
+    this.form.reset({
+      street: savedData?.street || '',
+      city: savedData?.city || '',
+      postalCode: savedData?.postalCode || '',
+      country: savedData?.country || '',
+      organizer: savedData?.organizer || '',
+      startDate: savedData?.startDate || '',
+      endDate: savedData?.endDate || ''
+    });
+    this.refreshLists();
   }
 
   onSubmit(event: Event): void {
     event.preventDefault();
     console.log(this.form.valid);
-    console.log(this.form.value); 
+    console.log(this.form.value);
+  
     if (this.form.valid) {
+      const formData = this.form.value; 
+      this.formDataService.setFormData(this.stageNumber, formData);
       if (this.stageNumber < this.totalStages) {
-        this.router.navigate([`/stage/${this.stageNumber + 1}`]);
+        this.router.navigate([`/stage/${this.totalStages}/${this.stageNumber + 1}`]);
       } else {
-        this.router.navigate(['/summary']);
+        this.router.navigate(['/confirm_register']);
       }
     } else {
       this.form.markAllAsTouched();
     }
   }
-
+  
   goBack(): void {
     if (this.stageNumber > 1) {
-      this.router.navigate([`/stage/${this.stageNumber - 1}`]);
+      this.router.navigate([`/stage/${this.totalStages}/${this.stageNumber - 1}`]);
     }
   }
 }
+
+function futureDateValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const inputDate = new Date(control.value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return inputDate < today ? { pastDate: true } : null;
+    };
+  }
+
+  function dateRangeValidator(form: AbstractControl): ValidationErrors | null {
+    const startDate = form.get('startDate')?.value;
+    const endDate = form.get('endDate')?.value;
+  
+    if (!startDate || !endDate) {
+      return null;
+    }
+  
+    return new Date(startDate) > new Date(endDate) ? { invalidRange: true } : null;
+  }
+
+  function dateStageValidator(formDataService: any, stageNumber: number): ValidatorFn {
+    return (form: AbstractControl): ValidationErrors | null => {
+      const currentStageData = formDataService.getFormData(stageNumber); 
+      const previousStageData = formDataService.getFormData(stageNumber - 1); 
+      if (!currentStageData || !previousStageData) {
+        return null; 
+      }
+  
+      const startDate = new Date(currentStageData.startDate);
+      const endDate = new Date(previousStageData.endDate);
+
+      return startDate < endDate ? {dateError: true} : null;
+    };
+  }
+  
