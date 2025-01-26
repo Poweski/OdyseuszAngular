@@ -8,7 +8,7 @@ import { FormDataService } from '../../shared/data-form.service';
   selector: 'app-stage-register', 
   templateUrl: './stage.component.html',
   styleUrls: ['../../styles.css'],
-    imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class StageComponent implements OnInit {
   form!: FormGroup;
@@ -77,7 +77,6 @@ export class StageComponent implements OnInit {
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    console.log(this.form.value);
     if (this.form.valid) {
       const formData = this.form.value; 
       this.formDataService.setFormData(this.stageNumber, formData);

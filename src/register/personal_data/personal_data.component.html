@@ -62,7 +62,7 @@
           <div class="mb-3">
             <label for="country" class="form-label">Kraj</label>
             <select id="country" formControlName="country" class="form-select">
-              <option value="">Wybierz kraj</option>
+              <option value="" selected disabled>Wybierz kraj</option>
               <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
             </select>
             <div *ngIf="form.get('country')?.invalid && form.get('country')?.touched" class="text-danger">
@@ -74,7 +74,7 @@
     </div>
 
     <div class="row justify-content-center mt-4">
-           <div class="col-auto">
+      <div class="col-auto">
         <button 
           type="button" 
           class="btn btn-secondary" 

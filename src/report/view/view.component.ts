@@ -1,17 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ReportService } from '../../shared/report.service';
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-personal_data',
   templateUrl: './view.component.html',
-  styleUrls: ['./view.component.css']
+  styleUrls: ['./view.component.css'],
+  imports: [CommonModule]
 })
-export class ViewComponent {
+export class ViewComponent implements OnInit {
 
-  onSubmit(): void {
-    console.log("Formularz został zatwierdzony:");
-  }
+  selectedCountries: string[] = [];
+  startDate: Date | null = null;
+  endDate: Date | null = null;
 
-  goBack(): void {
-    window.history.back();
+  constructor(private reportService: ReportService) {}
+
+  ngOnInit(): void {
+    this.selectedCountries = this.reportService.getAllCountries();
+    this.startDate = this.reportService.getStartDate();
+    this.endDate = this.reportService.getEndDate();
   }
 }

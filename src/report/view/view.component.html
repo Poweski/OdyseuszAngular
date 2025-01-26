@@ -2,12 +2,11 @@
     <div class="jumbotron p-4 bg-light rounded text-center">
       <h1 class="mb-4">Raport</h1>
       <p class="lead mb-2">
-        Interwał: <span id="dateRange"> 01.01.2023 - 31.12.2023</span>
+        Interwał: <span id="dateRange">{{ (startDate | date:'dd.MM.yyyy') }} - {{ (endDate | date:'dd.MM.yyyy') }}</span>
       </p>
       <p class="lead mb-4">
-        Wybrane kraje: <span id="selectedCountries"> Polska, Niemcy, Francja</span>
+        Wybrane kraje: <span id="selectedCountries">{{ selectedCountries.join(', ') }}</span>
       </p>
-    
 
     <table class="table table-bordered table-striped mt-4" style="font-size: 0.9rem;">
         <thead class="thead-dark">

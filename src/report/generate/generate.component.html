@@ -1,31 +1,90 @@
-<div class="jumbotron p-4 bg-light rounded text-center">
-  <div class="row mb-4 justify-content-center">
-    <div class="col-md-6 text-center">
-      <label for="startDate" class="form-label">Początek interwału:</label>
-      <input type="date" id="startDate" class="form-control mb-4 mx-auto" style="width:180px;" />
+<div class="container mt-5">
+  <div class="jumbotron p-4 bg-light rounded text-center">
+    <form [formGroup]="form" (ngSubmit)="onSubmit($event)">
+      <div class="row mb-4 justify-content-center">
+        <div class="col-md-6 text-center">
+          <label for="startDate" class="form-label">Początek interwału:</label>
+          <input
+            type="date"
+            id="startDate"
+            class="form-control mx-auto"
+            style="max-width: 350px;"
+            formControlName="startDate"
+          />
+          <div *ngIf="form.get('startDate')?.invalid && form.get('startDate')?.touched" class="text-danger">
+            <div *ngIf="form.get('startDate')?.hasError('required')">Początek interwału jest wymagany.</div>
+            <div *ngIf="form.get('startDate')?.hasError('pastDate')">Początek interwału nie może być w przyszłości.</div>
+          </div>
 
-      <label for="endDate" class="form-label">Koniec interwału:</label>
-      <input type="date" id="endDate" class="form-control mx-auto" style="width:180px;" />
-    </div>
+          <label for="endDate" class="form-label">Koniec interwału:</label>
+          <input
+            type="date"
+            id="endDate"
+            class="form-control mx-auto"
+            style="max-width: 350px;"
+            formControlName="endDate"
+          />
 
-    <div class="col-md-6 text-center">
-      <label for="largeTextArea" class="form-label">Filtr krajów:</label>
-      <textarea id="largeTextArea" class="form-control mb-3 mx-auto" rows="3" style="max-width:350px;"></textarea>
+          <div *ngIf="form.get('endDate')?.hasError('required') && form.get('endDate')?.touched" class="text-danger">Koniec interwału jest wymagany.</div>
+          <div *ngIf="form.get('endDate')?.hasError('pastDate') && form.get('endDate')?.touched" class="text-danger">Koniec interwału nie może być w przyszłości.</div>
 
-      <select id="dropdownMenu" class="form-select mx-auto" style="width:180px;">
-        <option value="" selected disabled>Dodaj kraj</option>
-        <option value="1">Opcja 1</option>
-        <option value="2">Opcja 2</option>
-        <option value="3">Opcja 3</option>
-      </select>
-    </div>
-  </div>
+          <div *ngIf="form.hasError('invalidRange')" class="text-danger">
+            Koniec interwału nie może być wcześniejszy niż początek interwału.
+          </div>
+        </div>
 
-  <div class="row mb-4 justify-content-center">
-    <button type="submit" class="btn btn-primary" style="width:130px;">Stwórz raport</button>
-  </div>
+        <div class="col-md-6 text-center">
+          <label for="largeTextArea" class="form-label">Filtr krajów:</label>
+          <textarea
+            disabled
+            id="largeTextArea"
+            class="form-control mb-3 mx-auto"
+            rows="3"
+            style="max-width: 350px;"
+            [value]="selectedCountries.join(', ')"
+          ></textarea>
 
-  <div class="button-container">
-    <a href="/view" class="btn btn-secondary">Dalej</a>
+          <select
+            id="dropdownMenu"
+            class="form-select mx-auto"
+            style="max-width: 350px;"
+            (change)="onSelectCountry($event)"
+          >
+            <option value="" selected disabled>Dodaj kraj</option>
+            <option value="1">Opcja 1</option>
+            <option value="2">Opcja 2</option>
+            <option value="3">Opcja 3</option>
+          </select>
+          <div *ngIf="form.hasError('noCountries', 'dropdownMenu') && form.get('dropdownMenu')?.touched" class="text-danger">
+            Musisz dodać co najmniej jeden kraj.
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4 justify-content-center">
+        <div class="col-auto">
+          <button type="button" class="btn btn-secondary" style="width: 200px;" (click)="goBack()">Cofnij</button>
+        </div>
+        <div class="col-auto">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            style="width: 200px;"
+            (click)="removeLastCountry()"
+          >
+            Cofnij wybór
+          </button>
+        </div>
+        <div class="col-auto">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            style="width: 200px;"
+          >
+            Stwórz raport
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

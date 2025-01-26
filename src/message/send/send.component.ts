@@ -1,20 +1,30 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from '../../shared/message.service';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators  } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-message-form',
   templateUrl: './send.component.html',
-  styleUrls: ['./send.component.css']
+  styleUrls: ['./send.component.css'],
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class SendComponent {
   selectedCountries: string[] = []; 
   message: string = '';
+  form: FormGroup;
 
   constructor(    
     private messageService: MessageService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({
+      countries: ['', Validators.required],
+      message: ['', Validators.required]
+    });
+  }
 
   onSelectCountry(event: any): void {
     const selectedCountry = event.target.value;
@@ -33,26 +43,18 @@ export class SendComponent {
     }
   }
 
-  sendMessage(): void {
-    console.log("Wiadomość została wysłana.");
-  }
-
   onSubmit(event: Event): void {
-    console.log('in submit');
     event.preventDefault();
-
-    if (this.selectedCountries.length === 0) {
-      alert('Musisz wybrać przynajmniej jeden kraj!');
-      return;
-    }
-
-    if (this.message.trim() === '') {
-      alert('Pole tekstowe nie może być puste!');
-      return;
-    }
-
+    console.log('in submit');
     console.log('Formularz został zatwierdzony:');
     this.router.navigate([`/confirm_message`]);
+  }
+
+  removeLastCountry(): void {
+    if (this.selectedCountries.length > 0) {
+      this.selectedCountries.pop();
+      this.messageService.removeCountry(this.selectedCountries[this.selectedCountries.length - 1]);
+    }
   }
 
   goBack(): void {
