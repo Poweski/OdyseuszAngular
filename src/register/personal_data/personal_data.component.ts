@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-personal_data',
+  selector: 'app-personal_data-register',
   templateUrl: './personal_data.component.html',
   styleUrls: ['./personal_data.component.css'],
   imports: [CommonModule, ReactiveFormsModule]
@@ -31,22 +31,9 @@ export class PersonalDataComponent implements OnInit {
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    console.log(this.form.valid);
-    console.log(this.form.value); 
     if (this.form.valid) {
-      console.warn('Formularz przeszedł.');
-      const formData = this.form.value;
-            // this.http.post('/api/travel-registration', formData).subscribe({
-      //   next: (response) => {
-      //     console.log('Dane zostały pomyślnie wysłane:', response);
-      //   },
-      //   error: (err) => {
-      //     console.error('Błąd wysyłania danych:', err);
-      //   }
-      // });
       this.router.navigate(['/number_of_stages']);
     } else {
-      console.warn('Formularz jest nieprawidłowy.');
       this.form.markAllAsTouched();
     }
   }

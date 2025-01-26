@@ -5,8 +5,9 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, 
 import { FormDataService } from '../../shared/data-form.service';
 
 @Component({
+  selector: 'app-stage-register', 
   templateUrl: './stage.component.html',
-  styleUrls: ['./stage.component.css'],
+  styleUrls: ['../../styles.css'],
     imports: [CommonModule, ReactiveFormsModule]
 })
 export class StageComponent implements OnInit {
@@ -27,7 +28,9 @@ export class StageComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.totalStages = +params['totalStages'];
       this.stageNumber = +params['stageNumber'];
-      this.resetForm();
+      if (this.form) {
+        this.resetForm();
+      }
     });
     const savedData = this.formDataService.getFormData(this.stageNumber);
     this.form = this.fb.group({
@@ -64,17 +67,21 @@ export class StageComponent implements OnInit {
       startDate: savedData?.startDate || '',
       endDate: savedData?.endDate || ''
     });
+    this.form.setValidators([
+      dateRangeValidator, 
+      dateStageValidator(this.formDataService, this.stageNumber)
+    ]);
+    this.form.updateValueAndValidity();
     this.refreshLists();
   }
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    console.log(this.form.valid);
     console.log(this.form.value);
-  
     if (this.form.valid) {
       const formData = this.form.value; 
       this.formDataService.setFormData(this.stageNumber, formData);
+      console.log(this.formDataService); 
       if (this.stageNumber < this.totalStages) {
         this.router.navigate([`/stage/${this.totalStages}/${this.stageNumber + 1}`]);
       } else {
@@ -114,13 +121,16 @@ function futureDateValidator(): ValidatorFn {
 
   function dateStageValidator(formDataService: any, stageNumber: number): ValidatorFn {
     return (form: AbstractControl): ValidationErrors | null => {
-      const currentStageData = formDataService.getFormData(stageNumber); 
+      if (stageNumber < 2) {
+        return null;
+      }
       const previousStageData = formDataService.getFormData(stageNumber - 1); 
-      if (!currentStageData || !previousStageData) {
+      console.log("DANE:"+previousStageData);
+      if (!previousStageData) {
         return null; 
       }
   
-      const startDate = new Date(currentStageData.startDate);
+      const startDate = form.get('startDate')?.value;
       const endDate = new Date(previousStageData.endDate);
 
       return startDate < endDate ? {dateError: true} : null;

@@ -1,9 +1,9 @@
 <div class="jumbotron p-4 bg-light rounded">
-<form>
+  <form (ngSubmit)="onSubmit($event)">
     <div class="row mb-3">
       <div class="col-md-6">
         <label for="selectField" class="form-label">Wybierz kraj:</label>
-        <select id="selectField" class="form-select">
+        <select id="selectField" class="form-select" (change)="onSelectCountry($event)">
           <option value="1">Opcja 1</option>
           <option value="2">Opcja 2</option>
           <option value="3">Opcja 3</option>
@@ -11,19 +11,18 @@
       </div>
       <div class="col-md-6">
         <label for="textField" class="form-label">Wybrane kraje:</label>
-        <input type="text" id="textField" class="form-control" placeholder="" disabled/>
+        <input type="text" id="textField" class="form-control" [value]="selectedCountries.join(', ')" disabled />
       </div>
     </div>
+    
     <div class="mb-3">
       <label for="largeTextArea" class="form-label">Treść wiadomości:</label>
       <textarea id="largeTextArea" class="form-control" rows="6" placeholder="Tutaj możesz wpisać treść wiadomości..."></textarea>
     </div>
+    
     <div class="row mb-3 justify-content-center">
-    <button type="submit" class="btn btn-primary" style="width:200px;">Wyślij wiadomość</button>
-  </div>
+      <button type="submit" class="btn btn-primary" style="width:200px;">Wyślij wiadomość</button>
+    </div>
   </form>
-
-  <div class="button-container">
-    <a href="/confirm_message" class="btn btn-secondary">Dalej</a>
-  </div>
+  
 </div>
