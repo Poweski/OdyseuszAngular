@@ -1,7 +1,7 @@
 import { ReportService } from '../../shared/report.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, 
 export class GenerateComponent {
   form!: FormGroup;
   selectedCountries: string[] = [];
+  countries: string[] = [];
   startDate: Date | null = null;
   endDate: Date | null = null;
   errorMessage: string = '';
@@ -23,6 +24,24 @@ export class GenerateComponent {
     private router: Router
   ) {}
 
+  sendReport(): void {
+    const countries = this.reportService.getApiCountries();
+    
+    const selectedCountryIds = this.selectedCountries.map((name) => {
+      const country = countries.find((c) => c.countryName === name);
+      return country ? country.countryId : null; 
+    }).filter((id) => id !== null);
+  
+    const reportData = {
+      startDate: this.reportService.getStartDate(),
+      endDate: this.reportService.getEndDate(),
+      filterCountryIds: selectedCountryIds
+    };
+  
+    console.log("Raport do wysłania: ", reportData);
+    this.reportService.setReportData(reportData);
+  }
+  
   ngOnInit(): void {
     this.form = this.fb.group({
         dropdownMenu: ['', [countriesValidator(this.selectedCountries)]],
@@ -33,6 +52,17 @@ export class GenerateComponent {
         validators: [dateRangeValidator]
       }
     );
+    this.reportService.fetchData();
+    this.reportService.getApiCountries();
+
+    this.reportService.fetchCountries().subscribe({
+      next: (countries: any[]) => {
+        this.countries = countries.map((country) => country.countryName);
+      },
+      error: (err) => {
+        console.error("Błąd pobierania krajów:", err);
+      }
+    });
   }
 
   onSubmit(event: Event): void {
@@ -53,6 +83,7 @@ export class GenerateComponent {
     }
   
     if (startDateValid && endDateValid && countriesValid) {
+      this.sendReport();
       this.router.navigate([`/view`]);
     } else {
       if (!startDateValid) {
@@ -81,17 +112,12 @@ export class GenerateComponent {
 
   onSelectCountry(event: any): void {
     const selectedCountry = event.target.value;
-    const countryMap: { [key: string]: string } = {
-      '1': 'Opcja 1',
-      '2': 'Opcja 2',
-      '3': 'Opcja 3',
-    };
-
-    const countryName = countryMap[selectedCountry] || selectedCountry;
-
-    if (!this.selectedCountries.includes(countryName)) {
-      this.selectedCountries.push(countryName);
-      this.reportService.addCountry(countryName);
+    const countries = this.reportService.getApiCountries();
+    const selectedCountryObj = countries.find((country) => country.countryName === selectedCountry);
+    
+    if (selectedCountryObj && !this.selectedCountries.includes(selectedCountryObj.countryName)) {
+      this.selectedCountries.push(selectedCountryObj.countryName);
+      this.reportService.addCountry(selectedCountryObj.countryName);
     }
   }
 

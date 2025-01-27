@@ -1,15 +1,15 @@
 <div class="container mt-5">
-    <div class="jumbotron p-4 bg-light rounded text-center">
-      <h1 class="mb-4">Raport</h1>
-      <p class="lead mb-2">
-        Interwał: <span id="dateRange">{{ (startDate | date:'dd.MM.yyyy') }} - {{ (endDate | date:'dd.MM.yyyy') }}</span>
-      </p>
-      <p class="lead mb-4">
-        Wybrane kraje: <span id="selectedCountries">{{ selectedCountries.join(', ') }}</span>
-      </p>
+  <div class="jumbotron p-4 bg-light rounded text-center">
+    <h1 class="mb-4">Raport</h1>
+    <p class="lead mb-2">
+      Interwał: <span id="dateRange">{{ (startDate | date:'dd.MM.yyyy') }} - {{ (endDate | date:'dd.MM.yyyy') }}</span>
+    </p>
+    <p class="lead mb-4">
+      Wybrane kraje: <span id="selectedCountries">{{ selectedCountries.join(', ') }}</span>
+    </p>
 
-    <table class="table table-bordered table-striped mt-4" style="font-size: 0.9rem;">
-        <thead class="thead-dark">
+    <table *ngIf="reportData.length > 0" class="table table-bordered table-striped mt-4" style="font-size: 0.9rem;">
+      <thead class="thead-dark">
         <tr>
           <th>#</th>
           <th>Imię</th>
@@ -22,34 +22,27 @@
           <th>Organizator pobytu</th>
         </tr>
       </thead>
-      <tbody id="reportTableBody">
-        <tr>
-          <td>1</td>
-          <td>Przykład 1</td>
-          <td>Przykład 2</td>
-          <td>Przykład 3</td>
-          <td>Przykład 4</td>
-          <td>Przykład 5</td>
-          <td>Przykład 6</td>
-          <td>Przykład 7</td>
-          <td>Przykład 8</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Przykład A</td>
-          <td>Przykład B</td>
-          <td>Przykład C</td>
-          <td>Przykład D</td>
-          <td>Przykład E</td>
-          <td>Przykład F</td>
-          <td>Przykład G</td>
-          <td>Przykład H</td>
+      <tbody>
+        <tr *ngFor="let entry of reportData; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ entry.name }}</td>
+          <td>{{ entry.surname }}</td>
+          <td>{{ entry.email }}</td>
+          <td>{{ entry.phone }}</td>
+          <td>{{ entry.arrivalDate | date:'dd.MM.yyyy' }}</td>
+          <td>{{ entry.departureDate | date:'dd.MM.yyyy' }}</td>
+          <td>{{ entry.country }}</td>
+          <td style="width:100px;">{{ entry.organizer }}</td>
         </tr>
       </tbody>
     </table>
+    
+    <div *ngIf="reportData.length === 0" class="text-center mt-4">
+      <p class="lead">Brak danych</p>
+    </div>
   </div>
 </div>
 
 <div class="row justify-content-center text-center mt-4">
-    <a href="/home" class="btn btn-secondary" style="width:120px;">Wróć</a>
-</div> 
+  <a href="/home" class="btn btn-secondary" style="width:120px;">Wróć</a>
+</div>

@@ -45,16 +45,17 @@
           ></textarea>
 
           <select
-            id="dropdownMenu"
-            class="form-select mx-auto"
-            style="max-width: 350px;"
-            (change)="onSelectCountry($event)"
-          >
-            <option value="">Dodaj kraj</option>
-            <option value="1">Opcja 1</option>
-            <option value="2">Opcja 2</option>
-            <option value="3">Opcja 3</option>
-          </select>
+          id="dropdownMenu"
+          class="form-select mx-auto"
+          style="max-width: 350px;"
+          (change)="onSelectCountry($event)"
+        >
+          <option value="">Dodaj kraj</option>
+          <option *ngFor="let country of countries" [value]="country">
+            {{ country }}
+          </option>
+        </select>
+        
           <div *ngIf="form.hasError('noCountries', 'dropdownMenu') && form.get('dropdownMenu')?.touched" class="text-danger">
             Musisz dodać co najmniej jeden kraj.
           </div>

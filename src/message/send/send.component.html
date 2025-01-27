@@ -10,10 +10,10 @@
             (change)="onSelectCountry($event)"
             formControlName="countries"
           >
-            <option value="">Wybierz kraj</option>
-            <option value="1">Opcja 1</option>
-            <option value="2">Opcja 2</option>
-            <option value="3">Opcja 3</option>
+          <option value="">Dodaj kraj</option>
+          <option *ngFor="let country of countries" [value]="country">
+            {{ country }}
+          </option>
           </select>
           <div *ngIf="form.get('countries')?.touched && form.get('countries')?.invalid">
             <small class="text-danger">Wybór kraju jest wymagany.</small>

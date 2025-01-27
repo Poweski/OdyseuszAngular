@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 })
 export class SendComponent {
   selectedCountries: string[] = [];
+  countries: string = "";
+  message: string = "";
   form: FormGroup;
 
   constructor(
@@ -23,6 +25,11 @@ export class SendComponent {
       countries: ['', Validators.required],
       message: ['', [Validators.required, this.messageLengthValidator]]
     });
+  }
+
+  ngOnInit(): void {
+    // Fetch available countries when the component loads
+    this.messageService.fetchData();
   }
 
   onSelectCountry(event: any): void {
@@ -48,7 +55,18 @@ export class SendComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.router.navigate([`/confirm_message`]);
+
+    // Wyślij dane formularza przez MessageService
+    // this.messageService.postMessage(this.selectedCountries, this.message).subscribe({
+    //   next: (response) => {
+    //     console.log('Wiadomość została wysłana pomyślnie:', response);
+    //     this.router.navigate(['/confirm_message']);
+    //   },
+    //   error: (err) => {
+    //     console.error('Błąd przy wysyłaniu wiadomości:', err);
+    //     // Pokaż komunikat o błędzie użytkownikowi, jeśli API nie odpowiada.
+    //   }
+    // });
   }
 
   removeLastCountry(): void {
