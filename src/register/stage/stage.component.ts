@@ -124,14 +124,13 @@ function futureDateValidator(): ValidatorFn {
         return null;
       }
       const previousStageData = formDataService.getFormData(stageNumber - 1); 
-      console.log("DANE:"+previousStageData);
+      
       if (!previousStageData) {
         return null; 
       }
   
-      const startDate = form.get('startDate')?.value;
+      const startDate = new Date(form.get('startDate')?.value);
       const endDate = new Date(previousStageData.endDate);
-
       return startDate < endDate ? {dateError: true} : null;
     };
   }

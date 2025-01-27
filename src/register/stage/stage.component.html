@@ -93,11 +93,11 @@
         </div>
     
         <div class="row justify-content-center mt-4">
-               <div class="col-auto">
+          <div class="col-auto" *ngIf="stageNumber !== 1">
             <button 
               type="button" 
               class="btn btn-secondary" 
-              style="width:100px;" 
+              style="width: 100px;" 
               (click)="goBack()">
               Cofnij
             </button>

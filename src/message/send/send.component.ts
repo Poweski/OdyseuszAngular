@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from '../../shared/message.service';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators  } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,18 +11,17 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ReactiveFormsModule]
 })
 export class SendComponent {
-  selectedCountries: string[] = []; 
-  message: string = '';
+  selectedCountries: string[] = [];
   form: FormGroup;
 
-  constructor(    
+  constructor(
     private messageService: MessageService,
     private router: Router,
     private fb: FormBuilder
   ) {
     this.form = this.fb.group({
       countries: ['', Validators.required],
-      message: ['', Validators.required]
+      message: ['', [Validators.required, this.messageLengthValidator]]
     });
   }
 
@@ -45,19 +44,31 @@ export class SendComponent {
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    console.log('in submit');
-    console.log('Formularz został zatwierdzony:');
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.router.navigate([`/confirm_message`]);
   }
 
   removeLastCountry(): void {
     if (this.selectedCountries.length > 0) {
-      this.selectedCountries.pop();
-      this.messageService.removeCountry(this.selectedCountries[this.selectedCountries.length - 1]);
+      const removedCountry = this.selectedCountries.pop();
+      if (removedCountry) {
+        this.messageService.removeCountry(removedCountry);
+      }
     }
   }
 
   goBack(): void {
     window.history.back();
+  }
+
+  private messageLengthValidator(control: AbstractControl): { [key: string]: any } | null {
+    const maxLength = 500;
+    if (control.value && control.value.length > maxLength) {
+      return { maxLengthExceeded: true };
+    }
+    return null;
   }
 }

@@ -1,38 +1,85 @@
 <div class="container mt-5">
   <div class="jumbotron p-4 bg-light rounded">
-    <form (ngSubmit)="onSubmit($event)">
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <label for="selectField" class="form-label">Wybierz kraj:</label>
-        <select id="selectField" class="form-select" (change)="onSelectCountry($event)">
-          <option value="">Wybierz kraj</option>
-          <option value="1">Opcja 1</option>
-          <option value="2">Opcja 2</option>
-          <option value="3">Opcja 3</option>
-        </select>
+    <form [formGroup]="form" (ngSubmit)="onSubmit($event)">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="selectField" class="form-label">Wybierz kraj:</label>
+          <select
+            id="selectField"
+            class="form-select"
+            (change)="onSelectCountry($event)"
+            formControlName="countries"
+          >
+            <option value="">Wybierz kraj</option>
+            <option value="1">Opcja 1</option>
+            <option value="2">Opcja 2</option>
+            <option value="3">Opcja 3</option>
+          </select>
+          <div *ngIf="form.get('countries')?.touched && form.get('countries')?.invalid">
+            <small class="text-danger">Wybór kraju jest wymagany.</small>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="textField" class="form-label">Wybrane kraje:</label>
+          <input
+            type="text"
+            id="textField"
+            class="form-control"
+            [value]="selectedCountries.join(', ')"
+            disabled
+          />
+        </div>
       </div>
-      <div class="col-md-6">
-        <label for="textField" class="form-label">Wybrane kraje:</label>
-        <input type="text" id="textField" class="form-control" [value]="selectedCountries.join(', ')" disabled />
+
+      <div class="mb-3">
+        <label for="largeTextArea" class="form-label">Treść wiadomości:</label>
+        <textarea
+          id="largeTextArea"
+          class="form-control"
+          rows="6"
+          placeholder="Tutaj możesz wpisać treść wiadomości..."
+          formControlName="message"
+        ></textarea>
+        <div *ngIf="form.get('message')?.touched && form.get('message')?.hasError('required')">
+          <small class="text-danger">Wiadomość jest wymagana.</small>
+        </div>
+        <div *ngIf="form.get('message')?.hasError('maxLengthExceeded')">
+          <small class="text-danger">Wiadomość nie może przekraczać 500 znaków.</small>
+        </div>
       </div>
-    </div>
-    
-    <div class="mb-3">
-      <label for="largeTextArea" class="form-label">Treść wiadomości:</label>
-      <textarea id="largeTextArea" class="form-control" rows="6" placeholder="Tutaj możesz wpisać treść wiadomości..."></textarea>
-    </div>
-    
-    <div class="row justify-content-center mt-4">
-      <div class="col-auto">      
-        <button  type="button" class="btn btn-secondary" style="width:200px;" (click)="goBack()">Cofnij</button>
+
+      <div class="row justify-content-center mt-4">
+        <div class="col-auto">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            style="width: 200px;"
+            (click)="goBack()"
+          >
+            Cofnij
+          </button>
+        </div>
+        <div class="col-auto">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            style="width: 200px;"
+            (click)="removeLastCountry()"
+          >
+            Cofnij wybór
+          </button>
+        </div>
+        <div class="col-auto">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            style="width: 200px;"
+          >
+            Wyślij wiadomość
+          </button>
+        </div>
       </div>
-      <div class="col-auto"> 
-        <button type="button" class="btn btn-secondary" style="width:200px;" (click)="removeLastCountry()">Cofnij wybór</button>
-      </div>
-      <div class="col-auto"> 
-        <button type="submit" class="btn btn-primary" style="width:200px;">Wyślij wiadomość</button>
-      </div>
-    </div>
-  </form>
+    </form>
   </div>
 </div>
