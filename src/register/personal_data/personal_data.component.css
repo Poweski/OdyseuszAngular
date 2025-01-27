@@ -22,4 +22,7 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
-  
+
+  .gap {
+    margin-top: 15px;
+  }

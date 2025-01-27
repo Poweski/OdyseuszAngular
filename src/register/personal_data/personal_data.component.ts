@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormDataService } from '../../shared/data-form.service';
 
 @Component({
   selector: 'app-personal_data-register',
@@ -13,9 +13,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class PersonalDataComponent implements OnInit {
   form!: FormGroup;
-  countries: string[] = ['Polska', 'Niemcy', 'Francja', 'USA'];
+  countries: string[] = [];
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {}
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private formDataService: FormDataService
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -25,13 +29,25 @@ export class PersonalDataComponent implements OnInit {
       street: ['', [Validators.required]],
       city: ['', [Validators.required]],
       postalCode: ['', [Validators.required]],
-      country: ['', [Validators.required]]
+      country: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern(/^(\+?\d{1,3}[- ]?)?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{3}$/)]]
+    });
+
+    this.formDataService.fetchCountries().subscribe({
+      next: (countries: any[]) => {
+        this.countries = countries.map((country) => country.countryName);
+      },
+      error: (err) => {
+        console.error("Błąd pobierania krajów:", err);
+      }
     });
   }
 
   onSubmit(event: Event): void {
     event.preventDefault();
     if (this.form.valid) {
+      this.formDataService.setPersonalData(this.form.value);
       this.router.navigate(['/number_of_stages']);
     } else {
       this.form.markAllAsTouched();

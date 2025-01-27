@@ -8,7 +8,7 @@
       Wybrane kraje: <span id="selectedCountries">{{ selectedCountries.join(', ') }}</span>
     </p>
 
-    <table *ngIf="reportData.length > 0" class="table table-bordered table-striped mt-4" style="font-size: 0.9rem;">
+    <table *ngIf="reportData.length > 0" class="table table-bordered table-striped mt-4" style="font-size: 0.8rem;">
       <thead class="thead-dark">
         <tr>
           <th>#</th>
@@ -32,7 +32,7 @@
           <td>{{ entry.arrivalDate | date:'dd.MM.yyyy' }}</td>
           <td>{{ entry.departureDate | date:'dd.MM.yyyy' }}</td>
           <td>{{ entry.country }}</td>
-          <td style="width:100px;">{{ entry.organizer }}</td>
+          <td style="width:150px;">{{ entry.organizer }}</td>
         </tr>
       </tbody>
     </table>

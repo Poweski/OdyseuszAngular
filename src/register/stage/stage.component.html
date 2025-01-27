@@ -37,7 +37,7 @@
               <label for="country" class="form-label">Kraj</label>
               <select id="country" formControlName="country" class="form-select">
                 <option value="" selected disabled>Wybierz kraj</option>
-                <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+                <option *ngFor="let country of countries" [value]="country.countryName">{{ country.countryName }}</option>
               </select>
               <div *ngIf="form.get('country')?.invalid && form.get('country')?.touched" class="text-danger">
                 Kraj jest wymagany.
@@ -90,6 +90,10 @@
               </div>
 
             </div>
+        </div>
+
+        <div class="alert alert-warning" *ngIf="currentWarning">
+          <strong>Ostrzeżenie:</strong> {{ currentWarning }}
         </div>
     
         <div class="row justify-content-center mt-4">

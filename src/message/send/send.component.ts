@@ -12,61 +12,63 @@ import { CommonModule } from '@angular/common';
 })
 export class SendComponent {
   selectedCountries: string[] = [];
-  countries: string = "";
+  countries: string[] = [];
   message: string = "";
-  form: FormGroup;
+  form!: FormGroup;
 
   constructor(
     private messageService: MessageService,
     private router: Router,
     private fb: FormBuilder
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.form = this.fb.group({
       countries: ['', Validators.required],
       message: ['', [Validators.required, this.messageLengthValidator]]
     });
-  }
-
-  ngOnInit(): void {
-    // Fetch available countries when the component loads
     this.messageService.fetchData();
-  }
 
+    this.messageService.fetchCountries().subscribe({
+      next: (countries: any[]) => {
+        this.countries = countries.map((country) => country.countryName);
+      },
+      error: (err) => {
+        console.error("Błąd pobierania krajów:", err);
+      }
+    });
+  }
+  
   onSelectCountry(event: any): void {
     const selectedCountry = event.target.value;
-    const countryMap: { [key: string]: string } = {
-      '1': 'Opcja 1',
-      '2': 'Opcja 2',
-      '3': 'Opcja 3',
-    };
-
-    if (selectedCountry) {
-      const countryName = countryMap[selectedCountry] || selectedCountry;
-      if (!this.selectedCountries.includes(countryName)) {
-        this.selectedCountries.push(countryName);
-        this.messageService.addCountry(countryName);
-      }
+    const countries = this.messageService.getApiCountries();
+    const selectedCountryObj = countries.find((country) => country.countryName === selectedCountry);
+    
+    if (selectedCountryObj && !this.selectedCountries.includes(selectedCountryObj.countryName)) {
+      this.selectedCountries.push(selectedCountryObj.countryName);
+      this.messageService.addCountry(selectedCountryObj.countryName);
     }
   }
 
   onSubmit(event: Event): void {
     event.preventDefault();
+    this.message = this.form.get('message')?.value || '';
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    // Wyślij dane formularza przez MessageService
-    // this.messageService.postMessage(this.selectedCountries, this.message).subscribe({
-    //   next: (response) => {
-    //     console.log('Wiadomość została wysłana pomyślnie:', response);
-    //     this.router.navigate(['/confirm_message']);
-    //   },
-    //   error: (err) => {
-    //     console.error('Błąd przy wysyłaniu wiadomości:', err);
-    //     // Pokaż komunikat o błędzie użytkownikowi, jeśli API nie odpowiada.
-    //   }
-    // });
+    this.messageService.setMessage(this.message);
+    this.messageService.postMessage(this.message).subscribe({
+      next: (response) => {
+        console.log('Wiadomość została wysłana pomyślnie:', response);
+        this.router.navigate(['/confirm_message']);
+      },
+      error: (err) => {
+        console.error('Błąd przy wysyłaniu wiadomości:', err);
+      }
+    });
   }
 
   removeLastCountry(): void {

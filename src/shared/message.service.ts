@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -22,14 +23,37 @@ export class MessageService {
       }
     });
   }
+  
+  fetchCountries(): Observable<any[]> {
+    return this.apiService.getCountries().pipe(
+      tap((countries) => {
+        this.apiCountries = countries;
+      })
+    );
+  }
 
-  postMessage(selectedCountries: string[], message: string): Observable<any> {
+  postMessage(message: string): Observable<any> {
+    const countryIds = this.countries
+    .map(countryName => {
+      const matchingCountry = this.apiCountries.find(
+        apiCountry => apiCountry.countryName === countryName
+      );
+      return matchingCountry?.countryId;
+    })
+    .filter(Boolean); 
+  
     const payload = {
-      message: message,
-      countries: selectedCountries,
+      text: message,
+      workerId: "550e8400-e29b-41d4-a716-446655440000",
+      countryId: countryIds,
     };
-
+  
+    console.log("Sending:", JSON.stringify(payload, null, 2));
     return this.apiService.postMessage(payload);
+  }
+  
+  getApiCountries(): any[] {
+    return this.apiCountries;
   }
 
   setMessage(message: string): void {

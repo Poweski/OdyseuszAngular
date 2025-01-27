@@ -12,4 +12,11 @@ import { HomeReportComponent } from '../report/home/home.component';
 })
 export class HomePageComponent {
   title = 'government-service';
+
+  ngOnInit(): void {
+    window.history.pushState(null, '', window.location.href);
+    window.onpopstate = () => {
+      window.history.pushState(null, '', window.location.href);
+    };
+  }
 }
